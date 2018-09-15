@@ -33,7 +33,7 @@ static float pwm_gradient; // Precalulated value to speed up rpm to PWM conversi
 
 void Spindle_Init(void)
 {
-  pwm_gradient = SPINDLE_PWM_RANGE/(settings.rpm_max-settings.rpm_min);
+  pwm_gradient = SPINDLE_PWM_RANGE / (settings.rpm_max - settings.rpm_min);
 
 	Spindle_Stop();
 }
@@ -44,7 +44,7 @@ void Spindle_Init(void)
 // Called by spindle_init(), spindle_set_speed(), spindle_set_state(), and mc_reset().
 void Spindle_Stop(void)
 {
-	TIM1->CCR1 = 100; // Disable PWM. Output voltage is zero.
+	LL_TIM_OC_SetCompareCH4(TIM3, 0);
 
 #ifdef INVERT_SPINDLE_ENABLE_PIN
     LL_GPIO_SetOutputPin(GPIO_SPINDLE_ENA_PORT, GPIO_SPINDLE_ENA_PIN);
@@ -57,14 +57,17 @@ void Spindle_Stop(void)
 uint8_t Spindle_GetState(void)
 {
     // Check if PWM is enabled.
-	if(TIM1->CCR1 < 100)
-    {
-		/*if(SPINDLE_DIRECTION_PORT & (1<<SPINDLE_DIRECTION_BIT)) {
+	if(LL_TIM_OC_GetCompareCH4(TIM3) > 0)
+  {
+	  //TODO: verify direction
+		if(LL_GPIO_IsOutputPinSet(GPIO_SPINDLE_DIR_PORT, GPIO_SPINDLE_DIR_PIN))
+		{
 			return SPINDLE_STATE_CCW;
 		}
-		else {
+		else
+		{
 			return SPINDLE_STATE_CW;
-		}*/
+		}
 		return SPINDLE_STATE_CW;
 	}
 
@@ -74,15 +77,15 @@ uint8_t Spindle_GetState(void)
 
 // Sets spindle speed PWM output and enable pin, if configured. Called by spindle_set_state()
 // and stepper ISR. Keep routine small and efficient.
-void Spindle_SetSpeed(uint8_t pwm_value)
+void Spindle_SetSpeed(uint32_t pwm_value)
 {
-	TIM1->CCR1 = 100 - pwm_value; // Set PWM output level.
 #ifdef SPINDLE_ENABLE_OFF_WITH_ZERO_SPEED
 	if (pwm_value == SPINDLE_PWM_OFF_VALUE) {
 		Spindle_Stop();
 	}
 	else {
-		TIM_Cmd(TIM1, ENABLE); // Ensure PWM output is enabled.
+	  //  Set PWM duty cycle.
+	  LL_TIM_OC_SetCompareCH4(TIM3, pwm_value);
   #ifdef INVERT_SPINDLE_ENABLE_PIN
 		LL_GPIO_ResetOutputPin(GPIO_SPINDLE_ENA_PORT, GPIO_SPINDLE_ENA_PIN);
   #else
@@ -91,27 +94,27 @@ void Spindle_SetSpeed(uint8_t pwm_value)
 	}
 #else
 	if(pwm_value == SPINDLE_PWM_OFF_VALUE) {
-//	  TODO
-//		TIM_Cmd(TIM1, DISABLE); // Disable PWM. Output voltage is zero.
+	  // Set PWM duty cycle to zero.
+	  LL_TIM_OC_SetCompareCH4(TIM3, 0);
 	}
 	else {
-//	  TODO
-//		TIM_Cmd(TIM1, ENABLE); // Ensure PWM output is enabled.
+	  //  Set PWM duty cycle.
+	  LL_TIM_OC_SetCompareCH4(TIM3, pwm_value);
 	}
 #endif
 }
 
 
 // Called by spindle_set_state() and step segment generator. Keep routine small and efficient.
-uint8_t Spindle_ComputePwmValue(float rpm) // 328p PWM register is 8-bit.
+uint32_t Spindle_ComputePwmValue(float rpm)
 {
-	uint8_t pwm_value;
+	uint32_t pwm_value;
 
-	rpm *= (0.010*sys.spindle_speed_ovr); // Scale by spindle speed override value.
+	rpm *= (0.010 * sys.spindle_speed_ovr); // Scale by spindle speed override value.
 
 	// Calculate PWM register value based on rpm max/min settings and programmed rpm.
 	if((settings.rpm_min >= settings.rpm_max) || (rpm >= settings.rpm_max)) {
-		// No PWM range possible. Set simple on/off spindle control pin state.
+		// No PWM range possible, set to max
 		sys.spindle_speed = settings.rpm_max;
 		pwm_value = SPINDLE_PWM_MAX_VALUE;
 	}
@@ -129,7 +132,7 @@ uint8_t Spindle_ComputePwmValue(float rpm) // 328p PWM register is 8-bit.
 		// Compute intermediate PWM value with linear spindle speed model.
 		// NOTE: A nonlinear model could be installed here, if required, but keep it VERY light-weight.
 		sys.spindle_speed = rpm;
-		pwm_value = floor((rpm-settings.rpm_min)*pwm_gradient) + SPINDLE_PWM_MIN_VALUE;
+		pwm_value = floor((rpm - settings.rpm_min) * pwm_gradient) + SPINDLE_PWM_MIN_VALUE;
 	}
 
 	return pwm_value;

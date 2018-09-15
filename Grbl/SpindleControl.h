@@ -25,19 +25,19 @@
 #include <stdint.h>
 
 
-#define SPINDLE_NO_SYNC 			false
-#define SPINDLE_FORCE_SYNC 			true
+#define SPINDLE_NO_SYNC 			      false
+#define SPINDLE_FORCE_SYNC 			    true
 
-#define SPINDLE_STATE_DISABLE  		0  // Must be zero.
-#define SPINDLE_STATE_CW       		BIT(0)
-#define SPINDLE_STATE_CCW      		BIT(1)
+#define SPINDLE_STATE_DISABLE  		  0  // Must be zero.
+#define SPINDLE_STATE_CW       		  BIT(0)
+#define SPINDLE_STATE_CCW      		  BIT(1)
 
-#define SPINDLE_PWM_MAX_VALUE     	100 // Don't change. 328p fast PWM mode fixes top value as 255.
+#define SPINDLE_PWM_MAX_VALUE     	0xFFFF
 #ifndef SPINDLE_PWM_MIN_VALUE
-    #define SPINDLE_PWM_MIN_VALUE   1   // Must be greater than zero.
+    #define SPINDLE_PWM_MIN_VALUE   1 // Must be greater than zero.
 #endif
-#define SPINDLE_PWM_OFF_VALUE     	1
-#define SPINDLE_PWM_RANGE         	(SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
+#define SPINDLE_PWM_OFF_VALUE     	0
+#define SPINDLE_PWM_RANGE         	(SPINDLE_PWM_MAX_VALUE - SPINDLE_PWM_MIN_VALUE)
 
 
 // Initializes spindle pins and hardware PWM, if enabled.
@@ -59,11 +59,10 @@ void Spindle_Sync(uint8_t state, float rpm);
 void Spindle_SetState(uint8_t state, float rpm);
 
 // Sets spindle PWM quickly for stepper ISR. Also called by spindle_set_state().
-// NOTE: 328p PWM register is 8-bit.
-void Spindle_SetSpeed(uint8_t pwm_value);
+void Spindle_SetSpeed(uint32_t pwm_value);
 
-// Computes 328p-specific PWM register value for the given RPM for quick updating.
-uint8_t Spindle_ComputePwmValue(float rpm);
+// Computes PWM register value for the given RPM for quick updating.
+uint32_t Spindle_ComputePwmValue(float rpm);
 
 
 #endif // SPINDLECONTROL_H
