@@ -413,20 +413,20 @@ static void MX_GPIO_Init(void)
   LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOD);
 
   /**/
-  LL_GPIO_ResetOutputPin(GPIOC, X_EN_Pin|X_STP_Pin|X_DIR_Pin|Z_DIR_Pin 
-                          |A_EN_Pin|DQ_5_Pin|DQ_4_Pin|DQ_3_Pin);
+  LL_GPIO_ResetOutputPin(GPIOC, X_EN_Pin|X_STP_Pin|X_DIR_Pin|Z_STP_Pin 
+                          |Z_DIR_Pin|DQ_5_Pin|DQ_4_Pin|DQ_3_Pin);
 
   /**/
   LL_GPIO_ResetOutputPin(GPIOA, Y_EN_Pin|Y_STP_Pin|Y_DIR_Pin|Z_EN_Pin 
-                          |Z_STP_Pin|DQ_1_Pin|DQ_0_Pin|ST_LED_Pin);
+                          |DQ_1_Pin|DQ_0_Pin|ST_LED_Pin);
 
   /**/
-  LL_GPIO_ResetOutputPin(GPIOB, A_STP_Pin|A_DIR_Pin|B_EN_Pin|B_STP_Pin 
-                          |B_DIR_Pin);
+  LL_GPIO_ResetOutputPin(GPIOB, A_EN_Pin|A_STP_Pin|A_DIR_Pin|B_EN_Pin 
+                          |B_STP_Pin|B_DIR_Pin);
 
   /**/
-  GPIO_InitStruct.Pin = X_EN_Pin|X_STP_Pin|X_DIR_Pin|Z_DIR_Pin 
-                          |A_EN_Pin|DQ_5_Pin|DQ_4_Pin|DQ_3_Pin;
+  GPIO_InitStruct.Pin = X_EN_Pin|X_STP_Pin|X_DIR_Pin|Z_STP_Pin 
+                          |Z_DIR_Pin|DQ_5_Pin|DQ_4_Pin|DQ_3_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
@@ -434,15 +434,15 @@ static void MX_GPIO_Init(void)
   LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /**/
-  GPIO_InitStruct.Pin = A_MAX_Pin|B_MAX_Pin|FAULT_Pin|DI_3_Pin 
-                          |DI_4_Pin|X_MIN_Pin;
+  GPIO_InitStruct.Pin = A_MAX_Pin|B_MAX_Pin|DI_3_Pin|DI_4_Pin 
+                          |X_MIN_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
   LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /**/
   GPIO_InitStruct.Pin = Y_EN_Pin|Y_STP_Pin|Y_DIR_Pin|Z_EN_Pin 
-                          |Z_STP_Pin|DQ_1_Pin|DQ_0_Pin|ST_LED_Pin;
+                          |DQ_1_Pin|DQ_0_Pin|ST_LED_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
@@ -450,8 +450,14 @@ static void MX_GPIO_Init(void)
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /**/
-  GPIO_InitStruct.Pin = A_STP_Pin|A_DIR_Pin|B_EN_Pin|B_STP_Pin 
-                          |B_DIR_Pin;
+  GPIO_InitStruct.Pin = FAULT_Pin;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+  LL_GPIO_Init(FAULT_GPIO_Port, &GPIO_InitStruct);
+
+  /**/
+  GPIO_InitStruct.Pin = A_EN_Pin|A_STP_Pin|A_DIR_Pin|B_EN_Pin 
+                          |B_STP_Pin|B_DIR_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
