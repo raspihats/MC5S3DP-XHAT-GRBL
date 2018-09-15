@@ -6,12 +6,11 @@
 extern "C" {
 #endif
 
+#include "Serial.h"
 
 void Print_Init(void);
 int Printf(const char *str, ...);
 void PrintFloat(float n, uint8_t decimal_places);
-int8_t Getc(char *c);
-int Putc(const char c);
 void PrintFloat_CoordValue(float n);
 void PrintFloat_RateValue(float n);
 

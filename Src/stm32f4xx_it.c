@@ -192,6 +192,29 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32f4xx.s).                    */
 /******************************************************************************/
 
+/**
+* @brief This function handles USART1 global interrupt.
+*/
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+  if(LL_USART_IsActiveFlag_RXNE(USART1))
+  {
+    Serial_ISR_RXNE();
+    LL_USART_ClearFlag_RXNE(USART1);
+  }
+
+  if(LL_USART_IsActiveFlag_TXE(USART1))
+  {
+    Serial_ISR_TXE();
+  }
+
+  /* USER CODE END USART1_IRQn 0 */
+  /* USER CODE BEGIN USART1_IRQn 1 */
+
+  /* USER CODE END USART1_IRQn 1 */
+}
+
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

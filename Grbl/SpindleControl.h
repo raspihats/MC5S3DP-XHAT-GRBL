@@ -32,7 +32,7 @@
 #define SPINDLE_STATE_CW       		  BIT(0)
 #define SPINDLE_STATE_CCW      		  BIT(1)
 
-#define SPINDLE_PWM_MAX_VALUE     	0xFFFF
+#define SPINDLE_PWM_MAX_VALUE     	0xFFF
 #ifndef SPINDLE_PWM_MIN_VALUE
     #define SPINDLE_PWM_MIN_VALUE   1 // Must be greater than zero.
 #endif

@@ -111,8 +111,12 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
+  LL_SYSTICK_EnableIT();
+  LL_TIM_EnableCounter(TIM3);
+  LL_TIM_EnableAllOutputs(TIM3);
+
   // Init formatted output
-  Print_Init();
+  Serial_Init();
 
   System_Init();
   Stepper_Init();
@@ -126,50 +130,47 @@ int main(void)
   else {
     sys.state = STATE_IDLE;
   }
+
+  // Reset system variables.
+  uint8_t prior_state = sys.state;
+
+  System_Clear();
+  sys.state = prior_state;
+
+  Probe_Reset();
+
+  sys_probe_state = 0;
+  sys_rt_exec_state = 0;
+  sys_rt_exec_alarm = 0;
+  sys_rt_exec_motion_override = 0;
+  sys_rt_exec_accessory_override = 0;
+
+  // Reset Grbl-Advanced primary systems.
+  GC_Init();
+  Planner_Init();
+
+  Coolant_Init();
+  Limits_Init();
+  Probe_Init();
+  Spindle_Init();
+  Stepper_Reset();
+
+  // Sync cleared gcode and planner positions to current system position.
+  Planner_SyncPosition();
+  GC_SyncPosition();
+
+  // Print welcome message. Indicates an initialization has occured at power-up or with a reset.
+  Report_InitMessage();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    // Reset system variables.
-    uint8_t prior_state = sys.state;
-
-    System_Clear();
-    sys.state = prior_state;
-
-    Probe_Reset();
-
-    sys_probe_state = 0;
-    sys_rt_exec_state = 0;
-    sys_rt_exec_alarm = 0;
-    sys_rt_exec_motion_override = 0;
-    sys_rt_exec_accessory_override = 0;
-
-    // Reset Grbl-Advanced primary systems.
-    GC_Init();
-    Planner_Init();
-
-    Coolant_Init();
-    Limits_Init();
-    Probe_Init();
-    Spindle_Init();
-    Stepper_Reset();
-
-    // Sync cleared gcode and planner positions to current system position.
-    Planner_SyncPosition();
-    GC_SyncPosition();
-
-    // Print welcome message. Indicates an initialization has occured at power-up or with a reset.
-    Report_InitMessage();
-
-    // Start Grbl-Advanced main loop. Processes program inputs and executes them.
-    Protocol_MainLoop();
+  // Start Grbl-Advanced main loop. Processes program inputs and executes them.
+  Protocol_MainLoop();
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
 
-  }
   /* USER CODE END 3 */
 
 }
@@ -323,14 +324,14 @@ static void MX_TIM3_Init(void)
 
   TIM_InitStruct.Prescaler = 0;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 0xFFFF;
+  TIM_InitStruct.Autoreload = 0xFFF;
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   LL_TIM_Init(TIM3, &TIM_InitStruct);
 
   LL_TIM_OC_EnablePreload(TIM3, LL_TIM_CHANNEL_CH4);
 
   TIM_OC_InitStruct.OCMode = LL_TIM_OCMODE_PWM1;
-  TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_DISABLE;
+  TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_ENABLE;
   TIM_OC_InitStruct.OCNState = LL_TIM_OCSTATE_DISABLE;
   TIM_OC_InitStruct.CompareValue = 0;
   TIM_OC_InitStruct.OCPolarity = LL_TIM_OCPOLARITY_HIGH;
@@ -377,6 +378,10 @@ static void MX_USART1_UART_Init(void)
   GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
   GPIO_InitStruct.Alternate = LL_GPIO_AF_7;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* USART1 interrupt Init */
+  NVIC_SetPriority(USART1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  NVIC_EnableIRQ(USART1_IRQn);
 
   USART_InitStruct.BaudRate = 115200;
   USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;

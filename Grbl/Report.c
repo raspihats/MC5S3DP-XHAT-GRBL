@@ -38,7 +38,6 @@
 #include "Stepper.h"
 #include "System.h"
 #include "Report.h"
-
 #include "Print.h"
 //#include "FIFO_USART.h"
 
@@ -46,22 +45,22 @@
 // Internal report utilities to reduce flash with repetitive tasks turned into functions.
 static void Report_SettingPrefix(uint8_t n)
 {
-	Putc('$');
+  Serial_Write('$');
 	Printf("%d", n);
-	Putc('=');
+	Serial_Write('=');
 }
 
 
 static void Report_LineFeed(void)
 {
-	Putc('\r');
-	Putc('\n');
+  Serial_Write('\r');
+  Serial_Write('\n');
 }
 
 
 static void report_util_feedback_line_feed(void)
 {
-	Putc(']');
+  Serial_Write(']');
 	Report_LineFeed();
 }
 
@@ -86,7 +85,7 @@ static void Report_AxisValue(float *axis_value)
 		PrintFloat_CoordValue(axis_value[idx]);
 
 		if(idx < (N_AXIS-1)) {
-			Putc(',');
+			Serial_Write(',');
 		}
 	}
 }
@@ -204,7 +203,6 @@ void Report_FeedbackMessage(uint8_t message_code)
 // Welcome message
 void Report_InitMessage(void)
 {
-	//Printf("\r\nGRBL-Advanced %s ['$' for help]\r\n", GRBL_VERSION);
 	Printf("\r\nGrbl 1.1f ['$' for help]\r\n");
 }
 
@@ -289,7 +287,7 @@ void Report_ProbeParams(void)
 	Printf("[PRB:");
 	System_ConvertArraySteps2Mpos(print_position, sys_probe_position);
 	Report_AxisValue(print_position);
-	Putc(':');
+	Serial_Write(':');
 	Printf("%d", sys.probe_succeeded);
 	report_util_feedback_line_feed();
 }
@@ -325,7 +323,7 @@ void Report_NgcParams(void)
 
 		}
 
-		Putc(':');
+		Serial_Write(':');
 		Report_AxisValue(coord_data);
 		report_util_feedback_line_feed();
 	}
@@ -374,10 +372,10 @@ void Report_GCodeModes(void)
 		switch(gc_state.modal.program_flow)
 		{
 		case PROGRAM_FLOW_PAUSED:
-			Putc('0');
+			Serial_Write('0');
 			break;
 
-		// case PROGRAM_FLOW_OPTIONAL_STOP : Putc('1'); break; // M1 is ignored and not supported.
+		// case PROGRAM_FLOW_OPTIONAL_STOP : Serial_Write('1'); break; // M1 is ignored and not supported.
 		case PROGRAM_FLOW_COMPLETED_M2:
 		case PROGRAM_FLOW_COMPLETED_M30:
 			Printf("%d", gc_state.modal.program_flow);
@@ -393,34 +391,34 @@ void Report_GCodeModes(void)
 	switch(gc_state.modal.spindle)
 	{
 	case SPINDLE_ENABLE_CW:
-		Putc('3');
+		Serial_Write('3');
 		break;
 
 	case SPINDLE_ENABLE_CCW:
-		Putc('4');
+		Serial_Write('4');
 		break;
 
 	case SPINDLE_DISABLE:
-		Putc('5');
+		Serial_Write('5');
 		break;
 	}
 
 #ifdef ENABLE_M7
 	if(gc_state.modal.coolant) { // Note: Multiple coolant states may be active at the same time.
-		if (gc_state.modal.coolant & PL_COND_FLAG_COOLANT_MIST) { report_util_gcode_modes_M(); Putc('7'); }
-		if (gc_state.modal.coolant & PL_COND_FLAG_COOLANT_FLOOD) { report_util_gcode_modes_M(); Putc('8'); }
+		if (gc_state.modal.coolant & PL_COND_FLAG_COOLANT_MIST) { report_util_gcode_modes_M(); Serial_Write('7'); }
+		if (gc_state.modal.coolant & PL_COND_FLAG_COOLANT_FLOOD) { report_util_gcode_modes_M(); Serial_Write('8'); }
 	}
 	else {
-		report_util_gcode_modes_M(); Putc('9');
+		report_util_gcode_modes_M(); Serial_Write('9');
 	}
 #else
 	report_util_gcode_modes_M();
 
 	if(gc_state.modal.coolant) {
-		Putc('8');
+		Serial_Write('8');
 	}
 	else {
-		Putc('9');
+		Serial_Write('9');
 	}
 #endif
 
@@ -449,7 +447,7 @@ void Report_StartupLine(uint8_t n, char *line)
 {
 	Printf("$N");
 	Printf("%d", n);
-	Putc('=');
+	Serial_Write('=');
 	Printf("%s", line);
 	Report_LineFeed();
 }
@@ -457,9 +455,9 @@ void Report_StartupLine(uint8_t n, char *line)
 
 void Report_ExecuteStartupMessage(char *line, uint8_t status_code)
 {
-	Putc('>');
+	Serial_Write('>');
 	Printf("%s", line);
-	Putc(':');
+	Serial_Write(':');
 	Report_StatusMessage(status_code);
 }
 
@@ -471,70 +469,70 @@ void Report_BuildInfo(char *line)
 	Printf("%s", line);
 	report_util_feedback_line_feed();
 	Printf("[OPT:"); // Generate compile-time build option list
-    Putc('V');
+    Serial_Write('V');
 
 #ifdef USE_LINE_NUMBERS
-	Putc('N');
+	Serial_Write('N');
 #endif
 #ifdef ENABLE_M7
-	Putc('M');
+	Serial_Write('M');
 #endif
 #ifdef COREXY
-	Putc('C');
+	Serial_Write('C');
 #endif
 #ifdef PARKING_ENABLE
-	Putc('P');
+	Serial_Write('P');
 #endif
 #ifdef HOMING_FORCE_SET_ORIGIN
-	Putc('Z');
+	Serial_Write('Z');
 #endif
 #ifdef HOMING_SINGLE_AXIS_COMMANDS
-	Putc('H');
+	Serial_Write('H');
 #endif
 #ifdef LIMITS_TWO_SWITCHES_ON_AXES
-	Putc('T');
+	Serial_Write('T');
 #endif
 #ifdef ALLOW_FEED_OVERRIDE_DURING_PROBE_CYCLES
-	Putc('A');
+	Serial_Write('A');
 #endif
 #ifdef SPINDLE_ENABLE_OFF_WITH_ZERO_SPEED
-	Putc('0');
+	Serial_Write('0');
 #endif
 #ifdef ENABLE_SOFTWARE_DEBOUNCE
-	Putc('S');
+	Serial_Write('S');
 #endif
 #ifdef ENABLE_PARKING_OVERRIDE_CONTROL
-	Putc('R');
+	Serial_Write('R');
 #endif
 #ifndef ENABLE_RESTORE_EEPROM_WIPE_ALL // NOTE: Shown when disabled.
-	Putc('*');
+	Serial_Write('*');
 #endif
 #ifndef ENABLE_RESTORE_EEPROM_DEFAULT_SETTINGS // NOTE: Shown when disabled.
-	Putc('$');
+	Serial_Write('$');
 #endif
 #ifndef ENABLE_RESTORE_EEPROM_CLEAR_PARAMETERS // NOTE: Shown when disabled.
-	Putc('#');
+	Serial_Write('#');
 #endif
 #ifndef ENABLE_BUILD_INFO_WRITE_COMMAND // NOTE: Shown when disabled.
-	Putc('I');
+	Serial_Write('I');
 #endif
 #ifndef FORCE_BUFFER_SYNC_DURING_EEPROM_WRITE // NOTE: Shown when disabled.
-	Putc('E');
+	Serial_Write('E');
 #endif
 #ifndef FORCE_BUFFER_SYNC_DURING_WCO_CHANGE // NOTE: Shown when disabled.
-	Putc('W');
+	Serial_Write('W');
 #endif
 #ifndef HOMING_INIT_LOCK
-	Putc('L');
+	Serial_Write('L');
 #endif
 #ifdef ENABLE_SAFETY_DOOR_INPUT_PIN
-    Putc('+');
+    Serial_Write('+');
 #endif
 
 	// NOTE: Compiled values, like override increments/max/min values, may be added at some point later.
-	Putc(',');
+	Serial_Write(',');
 	Printf("%d", BLOCK_BUFFER_SIZE-1);
-	Putc(',');
+	Serial_Write(',');
 	Printf("%d", LINE_BUFFER_SIZE);
 
 	report_util_feedback_line_feed();
@@ -566,8 +564,8 @@ void Report_RealtimeStatus(void)
 	System_ConvertArraySteps2Mpos(print_position, current_position);
 
 	// Report current machine state and sub-states
-	//Putc('\n');
-	Putc('<');
+	//Serial_Write('\n');
+	Serial_Write('<');
 
 	switch(sys.state)
 	{
@@ -584,10 +582,10 @@ void Report_RealtimeStatus(void)
 			Printf("Hold:");
 
 			if(sys.suspend & SUSPEND_HOLD_COMPLETE) {
-				Putc('0');
+				Serial_Write('0');
 			} // Ready to resume
 			else {
-				Putc('1');
+				Serial_Write('1');
 			} // Actively holding
 			break;
 		} // Continues to print jog state during jog cancel.
@@ -599,19 +597,19 @@ void Report_RealtimeStatus(void)
 	case STATE_SAFETY_DOOR:
 		Printf("Door:");
 		if (sys.suspend & SUSPEND_INITIATE_RESTORE) {
-			Putc('3'); // Restoring
+			Serial_Write('3'); // Restoring
 		}
 		else {
 			if(sys.suspend & SUSPEND_RETRACT_COMPLETE) {
 				if(sys.suspend & SUSPEND_SAFETY_DOOR_AJAR) {
-					Putc('1'); // Door ajar
+					Serial_Write('1'); // Door ajar
 				}
 				else {
-					Putc('0');
+					Serial_Write('0');
 				} // Door closed and ready to resume
 			}
 			else {
-				Putc('2'); // Retracting
+				Serial_Write('2'); // Retracting
 			}
 		}
 		break;
@@ -654,7 +652,7 @@ void Report_RealtimeStatus(void)
 	if(BIT_IS_TRUE(settings.status_report_mask, BITFLAG_RT_STATUS_BUFFER_STATE)) {
 		Printf("|Bf:");
 		Printf("%d", Planner_GetBlockBufferAvailable());
-		Putc(',');
+		Serial_Write(',');
 //		TODO
 //		Printf("%d", FifoUsart_Available(STDOUT_NUM));
 	}
@@ -677,7 +675,7 @@ void Report_RealtimeStatus(void)
 #ifdef REPORT_FIELD_CURRENT_FEED_SPEED
 	Printf("|FS:");
 	PrintFloat_RateValue(Stepper_GetRealtimeRate());
-	Putc(',');
+	Serial_Write(',');
 	PrintFloat(sys.spindle_speed, N_DECIMAL_RPMVALUE);
 #endif
 
@@ -689,20 +687,20 @@ void Report_RealtimeStatus(void)
 	if(lim_pin_state | ctrl_pin_state | prb_pin_state) {
 		Printf("|Pn:");
 		if(prb_pin_state) {
-			Putc('P');
+			Serial_Write('P');
 		}
 
 		if(lim_pin_state) {
-			if (BIT_IS_TRUE(lim_pin_state, BIT(X_AXIS))) { Putc('X'); }
-			if (BIT_IS_TRUE(lim_pin_state, BIT(Y_AXIS))) { Putc('Y'); }
-			if (BIT_IS_TRUE(lim_pin_state, BIT(Z_AXIS))) { Putc('Z'); }
+			if (BIT_IS_TRUE(lim_pin_state, BIT(X_AXIS))) { Serial_Write('X'); }
+			if (BIT_IS_TRUE(lim_pin_state, BIT(Y_AXIS))) { Serial_Write('Y'); }
+			if (BIT_IS_TRUE(lim_pin_state, BIT(Z_AXIS))) { Serial_Write('Z'); }
 		}
 
 		if(ctrl_pin_state) {
-			if (BIT_IS_TRUE(ctrl_pin_state, CONTROL_PIN_INDEX_SAFETY_DOOR)) { Putc('D'); }
-			if (BIT_IS_TRUE(ctrl_pin_state, CONTROL_PIN_INDEX_RESET)) { Putc('R'); }
-			if (BIT_IS_TRUE(ctrl_pin_state, CONTROL_PIN_INDEX_FEED_HOLD)) { Putc('H'); }
-			if (BIT_IS_TRUE(ctrl_pin_state, CONTROL_PIN_INDEX_CYCLE_START)) { Putc('S'); }
+			if (BIT_IS_TRUE(ctrl_pin_state, CONTROL_PIN_INDEX_SAFETY_DOOR)) { Serial_Write('D'); }
+			if (BIT_IS_TRUE(ctrl_pin_state, CONTROL_PIN_INDEX_RESET)) { Serial_Write('R'); }
+			if (BIT_IS_TRUE(ctrl_pin_state, CONTROL_PIN_INDEX_FEED_HOLD)) { Serial_Write('H'); }
+			if (BIT_IS_TRUE(ctrl_pin_state, CONTROL_PIN_INDEX_CYCLE_START)) { Serial_Write('S'); }
 		}
 	}
 #endif
@@ -742,9 +740,9 @@ void Report_RealtimeStatus(void)
 
 		Printf("|Ov:");
 		Printf("%d", sys.f_override);
-		Putc(',');
+		Serial_Write(',');
 		Printf("%d", sys.r_override);
-		Putc(',');
+		Serial_Write(',');
 		Printf("%d", sys.spindle_speed_ovr);
 
 		uint8_t sp_state = Spindle_GetState();
@@ -755,25 +753,25 @@ void Report_RealtimeStatus(void)
 
 			if(sp_state) { // != SPINDLE_STATE_DISABLE
 				if(sp_state == SPINDLE_STATE_CW) {
-					Putc('S');
+					Serial_Write('S');
 				} // CW
 				else {
-					Putc('C');
+					Serial_Write('C');
 				} // CCW
 			}
 
 			if(cl_state & COOLANT_STATE_FLOOD) {
-				Putc('F');
+				Serial_Write('F');
 			}
   #ifdef ENABLE_M7
 			if(cl_state & COOLANT_STATE_MIST) {
-				Putc('M');
+				Serial_Write('M');
 			}
   #endif
 		}
 	}
 #endif
 
-	Putc('>');
+	Serial_Write('>');
 	Report_LineFeed();
 }

@@ -38,10 +38,17 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MC5S3DP-XHAT-GRBL/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;" />
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MC5S3DP-XHAT-GRBL/Drivers/CMSIS/Include}&quot;" />
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MC5S3DP-XHAT-GRBL/Grbl}&quot;" />
-								<listOptionValue builtIn="false" value="../Inc" /><listOptionValue builtIn="false" value="../Drivers/STM32F4xx_HAL_Driver/Inc" /><listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F4xx/Include" /></option>
+									<listOptionValue builtIn="false" value="../Inc" />
+									<listOptionValue builtIn="false" value="../Drivers/STM32F4xx_HAL_Driver/Inc" />
+									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F4xx/Include" />
+									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include" />
+								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.292430813" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="USE_FULL_LL_DRIVER" />
-									
+									<listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;" />
+									<listOptionValue builtIn="false" value="__packed=&quot;__attribute__((__packed__))&quot;" />
+									<listOptionValue builtIn="false" value="STM32F411xE" />
+									<listOptionValue builtIn="false" value="HSE_VALUE=8000000" />
 									<listOptionValue builtIn="false" value="HSE_STARTUP_TIMEOUT=100" />
 									<listOptionValue builtIn="false" value="LSE_STARTUP_TIMEOUT=5000" />
 									<listOptionValue builtIn="false" value="LSE_VALUE=32768" />
@@ -52,10 +59,7 @@
 									<listOptionValue builtIn="false" value="PREFETCH_ENABLE=1" />
 									<listOptionValue builtIn="false" value="INSTRUCTION_CACHE_ENABLE=1" />
 									<listOptionValue builtIn="false" value="DATA_CACHE_ENABLE=1" />
-									<listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;" />
-									<listOptionValue builtIn="false" value="__packed=&quot;__attribute__((__packed__))&quot;" />
-									<listOptionValue builtIn="false" value="STM32F411xE" />
-								<listOptionValue builtIn="false" value="HSE_VALUE=8000000" /></option>
+								</option>
 								<option id="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other.1432443288" superClass="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string" />
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.1333422917" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c" />
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1184374299" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s" />
@@ -71,7 +75,10 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1715704299" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="USE_FULL_LL_DRIVER" />
-									
+									<listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;" />
+									<listOptionValue builtIn="false" value="__packed=&quot;__attribute__((__packed__))&quot;" />
+									<listOptionValue builtIn="false" value="STM32F411xE" />
+									<listOptionValue builtIn="false" value="HSE_VALUE=8000000" />
 									<listOptionValue builtIn="false" value="HSE_STARTUP_TIMEOUT=100" />
 									<listOptionValue builtIn="false" value="LSE_STARTUP_TIMEOUT=5000" />
 									<listOptionValue builtIn="false" value="LSE_VALUE=32768" />
@@ -82,10 +89,7 @@
 									<listOptionValue builtIn="false" value="PREFETCH_ENABLE=1" />
 									<listOptionValue builtIn="false" value="INSTRUCTION_CACHE_ENABLE=1" />
 									<listOptionValue builtIn="false" value="DATA_CACHE_ENABLE=1" />
-									<listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;" />
-									<listOptionValue builtIn="false" value="__packed=&quot;__attribute__((__packed__))&quot;" />
-									<listOptionValue builtIn="false" value="STM32F411xE" />
-								<listOptionValue builtIn="false" value="HSE_VALUE=8000000" /></option>
+								</option>
 								<option id="fr.ac6.managedbuild.gnu.cpp.compiler.option.misc.other.432560266" name="Other flags" superClass="fr.ac6.managedbuild.gnu.cpp.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string" />
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.cpp.1389651419" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.cpp" />
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.s.1806600607" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.s" />
@@ -168,7 +172,10 @@
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.292430813" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="USE_FULL_LL_DRIVER" />
-									
+									<listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;" />
+									<listOptionValue builtIn="false" value="__packed=&quot;__attribute__((__packed__))&quot;" />
+									<listOptionValue builtIn="false" value="STM32F411xE" />
+									<listOptionValue builtIn="false" value="HSE_VALUE=8000000" />
 									<listOptionValue builtIn="false" value="HSE_STARTUP_TIMEOUT=100" />
 									<listOptionValue builtIn="false" value="LSE_STARTUP_TIMEOUT=5000" />
 									<listOptionValue builtIn="false" value="LSE_VALUE=32768" />
@@ -179,10 +186,7 @@
 									<listOptionValue builtIn="false" value="PREFETCH_ENABLE=1" />
 									<listOptionValue builtIn="false" value="INSTRUCTION_CACHE_ENABLE=1" />
 									<listOptionValue builtIn="false" value="DATA_CACHE_ENABLE=1" />
-									<listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;" />
-									<listOptionValue builtIn="false" value="__packed=&quot;__attribute__((__packed__))&quot;" />
-									<listOptionValue builtIn="false" value="STM32F411xE" />
-								<listOptionValue builtIn="false" value="HSE_VALUE=8000000" /></option>
+								</option>
 								<option id="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other.1432443288" superClass="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string" />
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.1333422917" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c" />
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1184374299" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s" />
@@ -198,7 +202,10 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.symbols.1515438185" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="USE_FULL_LL_DRIVER" />
-									
+									<listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;" />
+									<listOptionValue builtIn="false" value="__packed=&quot;__attribute__((__packed__))&quot;" />
+									<listOptionValue builtIn="false" value="STM32F411xE" />
+									<listOptionValue builtIn="false" value="HSE_VALUE=8000000" />
 									<listOptionValue builtIn="false" value="HSE_STARTUP_TIMEOUT=100" />
 									<listOptionValue builtIn="false" value="LSE_STARTUP_TIMEOUT=5000" />
 									<listOptionValue builtIn="false" value="LSE_VALUE=32768" />
@@ -209,11 +216,8 @@
 									<listOptionValue builtIn="false" value="PREFETCH_ENABLE=1" />
 									<listOptionValue builtIn="false" value="INSTRUCTION_CACHE_ENABLE=1" />
 									<listOptionValue builtIn="false" value="DATA_CACHE_ENABLE=1" />
-									<listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;" />
-									<listOptionValue builtIn="false" value="__packed=&quot;__attribute__((__packed__))&quot;" />
-									<listOptionValue builtIn="false" value="STM32F411xE" />
-								<listOptionValue builtIn="false" value="HSE_VALUE=8000000" /></option>
-								<option id="fr.ac6.managedbuild.gnu.cpp.compiler.option.misc.other.432560266" superClass="fr.ac6.managedbuild.gnu.cpp.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string" />
+								</option>
+								<option id="fr.ac6.managedbuild.gnu.cpp.compiler.option.misc.other.432560266" name="Other flags" superClass="fr.ac6.managedbuild.gnu.cpp.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string" />
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.cpp.1389651419" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.cpp" />
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.s.1806600607" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.s" />
 							</tool>
@@ -221,7 +225,7 @@
 								<option id="fr.ac6.managedbuild.tool.gnu.cross.c.linker.script.905074575" name="Linker Script (-T)" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.linker.script" value="../STM32F411RCTx_FLASH.ld" valueType="string" />
 								<option id="gnu.c.link.option.libs.222417167" name="Libraries (-l)" superClass="gnu.c.link.option.libs" />
 								<option id="gnu.c.link.option.paths.731222363" name="Library search path (-L)" superClass="gnu.c.link.option.paths" />
-								<option id="gnu.c.link.option.ldflags.1547688615" superClass="gnu.c.link.option.ldflags" value="-specs=nosys.specs -specs=nano.specs" valueType="string" />
+								<option id="gnu.c.link.option.ldflags.1547688615" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="-specs=nosys.specs -specs=nano.specs" valueType="string" />
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1938435547" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)" />
 									<additionalInput kind="additionalinput" paths="$(LIBS)" />
@@ -250,10 +254,10 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup" />
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers" />
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src" />
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc" />
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src" />
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup" />
 					</sourceEntries>
 				</configuration>
 			</storageModule>

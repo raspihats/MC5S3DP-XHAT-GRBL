@@ -4,17 +4,16 @@
 #include "main.h"
 #include "Print.h"
 #include "Config.h"
-//#include "USART.h"
-//#include "FIFO_USART.h"
+#include "Serial.h"
 #include "Settings.h"
 
 
-#define MAX_BUFFER_SIZE     128
+#define MAX_BUFFER_SIZE     256
 
 
 void Print_Init(void)
 {
-//	Usart_Init(STDOUT, BAUD_RATE);
+
 }
 
 int Printf(const char *str, ...)
@@ -25,21 +24,9 @@ int Printf(const char *str, ...)
 	va_list vl;
 	va_start(vl, str);
 	int i = vsnprintf(buffer, MAX_BUFFER_SIZE, str, vl);
-
-	if(i > MAX_BUFFER_SIZE)
-  {
-      i = MAX_BUFFER_SIZE;
-  }
-
-	while(i)
-  {
-	  while(!LL_USART_IsActiveFlag_TC(USART1));
-	  LL_USART_TransmitData8(USART1, buffer[idx++]);
-
-		i--;
-	}
-
 	va_end(vl);
+
+  Serial_PutString(buffer);
 
 	return 0;
 }
@@ -52,7 +39,7 @@ int Printf(const char *str, ...)
 void PrintFloat(float n, uint8_t decimal_places)
 {
 	if(n < 0) {
-		Putc('-');
+		Serial_Write('-');
 		n = -n;
 	}
 
@@ -89,29 +76,13 @@ void PrintFloat(float n, uint8_t decimal_places)
 	// Print the generated string.
 	for(; i > 0; i--) {
 		if(i == decimal_places) {
-			Putc('.');
+		  Serial_Write('.');
 		} // Insert decimal point in right place.
-		Putc(buf[i-1]);
+		Serial_Write(buf[i-1]);
 	}
 }
 
-int8_t Getc(char *c)
-{
-  //TODO
-//	if(FifoUsart_Get(STDOUT_NUM, USART_DIR_RX, c) == 0) {
-//		return 0;
-//	}
 
-	return -1;
-}
-
-int Putc(const char c)
-{
-  while(!LL_USART_IsActiveFlag_TC(USART1));
-  LL_USART_TransmitData8(USART1, c);
-
-	return 0;
-}
 
 // Floating value printing handlers for special variables types used in Grbl and are defined
 // in the config.h.

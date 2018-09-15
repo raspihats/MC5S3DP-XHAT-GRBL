@@ -29,8 +29,8 @@
 #include "SpindleControl.h"
 #include "CoolantControl.h"
 #include "Protocol.h"
-
-#include "Print.h"
+#include "Serial.h"
+//#include "Print.h"
 
 
 // Line buffer size from the serial input stream to be executed.
@@ -99,7 +99,7 @@ void Protocol_MainLoop(void)
 	for(;;) {
 		// Process one line of incoming serial data, as the data becomes available. Performs an
 		// initial filtering by removing spaces and comments and capitalizing all letters.
-		while(Getc(&c) == 0) {
+		while(Serial_Read(&c) == SERIAL_GOT_DATA) {
 			if((c == '\n') || (c == '\r')) { // End of line reached
 				Protocol_ExecuteRealtime(); // Runtime command check point.
 
